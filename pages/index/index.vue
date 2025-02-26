@@ -16,9 +16,9 @@
 			<up-tabs class="tab-box" :list="tabList" @click="tabClick"
 				itemStyle="padding-left: 15px; padding-right: 15px; min-width: 20%; height: 34px;"></up-tabs>
 		</up-sticky>
-		<view class="list-box">
-			<up-list @scrolltolower="scrolltolower" height="height">
-				<up-list-item v-for="(item, index) in this.tabList[this.tabIndex].list" :key="index">
+		<view class="list-box" id="list-box">
+			<up-list @scrolltolower="scrolltolower" :height="height">
+				<up-list-item v-for="(item, index) in this.tabList[this.tabIndex].list" :key="index" @click="clickItem(item)">
 					<view class="item-box">
 						<image class="item-img" :src="item.imgUrl" mode="aspectFill"></image>
 						<view class="item-right">
@@ -119,6 +119,9 @@
 					return
 				}
 				this.isLoading = true
+				uni.showLoading({
+					title: '加载中'
+				});
 				setTimeout(() => {
 					let index1 = 1;
 					tablist[index].page = newpage;
@@ -204,6 +207,7 @@
 					this.tabList = tablist
 					console.log(this.tabList)
 					this.isLoading = false
+					uni.hideLoading();
 				}, 1000)
 			},
 			rightClick() {
@@ -212,6 +216,11 @@
 			change1(item) {
 				console.log(item)
 				this.tabbarValue = item
+			},
+			clickItem(item){
+				uni.navigateTo({
+					url: `/pages/detail/detail?id=${item.id}&name=uniapp`
+				});
 			}
 		}
 	}
